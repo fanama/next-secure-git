@@ -15,7 +15,6 @@ jobs:
     runs-on: self-hosted      
 
     steps:
-    - run: npm i -g pnpm
     - run: pnpm install
     - run: pnpm ci
     - run: pnpm run build --if-present
