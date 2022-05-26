@@ -1,6 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
-
-module.exports = nextConfig
+module.exports = {
+    swcMinify: false,
+    presets: ['next/babel'],
+    env: { TEST: process.env.TEST },
+    async rewrites() {
+        return [];
+    },
+};
