@@ -1,0 +1,47 @@
+stages:
+  - build_stage
+  - deploy_stage
+
+.base-rules:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: $CI_COMMIT_TAG
+      when: never
+
+cache: &global_cache
+  key: $CI_COMMIT_REF_SLUG
+  policy: pull-push
+  paths:
+    - backend/node_modules/
+    - frontend/node_modules/
+    - frontend/.next
+    - frontend/next.config.js
+    - package-lock.json
+
+build:
+  stage: build_stage
+  extends: .base-rules
+  script:
+    - npm i &&  npm run build 
+  cache:
+    <<: *global_cache
+    policy: push
+  tags:
+    - local_runner
+
+deploy:
+  stage: deploy_stage
+  extends: .base-rules
+  script:
+    - pm2 delete smartAfflueEnceSetup
+    - pm2 start npm --name myApp -- start
+    - ls -a
+  cache:
+    <<: *global_cache
+    policy: pull
+  tags:
+    - local_runner
+

@@ -17,3 +17,11 @@ jobs:
     steps:
     - run: pnpm install
     - run: pnpm run build 
+  
+  deploy:
+
+    runs-on: self-hosted      
+
+    steps:
+    - run: pnpm install
+    - run: pnpm run build 
