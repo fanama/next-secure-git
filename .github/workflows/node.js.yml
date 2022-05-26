@@ -16,5 +16,5 @@ jobs:
 
     steps:
     - run: pnpm install
-    - run: pnpm run build --if-present
-    - run: pnpm start --if-present
+    - run: pnpm run build 
+    - run: pnpm start 
