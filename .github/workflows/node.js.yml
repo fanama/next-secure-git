@@ -17,4 +17,3 @@ jobs:
     steps:
     - run: pnpm install
     - run: pnpm run build 
-    - run: pnpm start 
