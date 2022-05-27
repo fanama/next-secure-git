@@ -17,6 +17,7 @@ jobs:
     steps:
     - run: npm --version
     - run: npm i -g pnpm
+    - run: pwd && ls
     - run: pnpm install
     - run: pnpm run build 
   
