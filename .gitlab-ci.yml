@@ -46,7 +46,7 @@ deploy:
   stage: deploy_stage
   extends: .base-rules
   script:
-    - ssh $SSH_USER@$SSH_IP "cd $PATH && git checkout dev && pm2 delete $APPNAME && pm2 start npm --name $APPNAME -- start"
+    - ssh $SSH_USER@$SSH_IP "cd $PATH && git checkout dev && npm i && npm run build && pm2 delete $APPNAME && pm2 start npm --name $APPNAME -- start"
     - pm2 delete $APPNAME
     - pm2 start npm --name $APPNAME -- start
   cache:
