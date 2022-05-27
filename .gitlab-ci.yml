@@ -32,13 +32,23 @@ build:
   tags:
     - local_runner
 
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  # Setup SSH deploy keys
+  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
 deploy:
   stage: deploy_stage
   extends: .base-rules
   script:
-    - pm2 delete smartAfflueEnceSetup
-    - pm2 start npm --name myApp -- start
-    - ls -a
+    - ssh $SSH_USER@$SSH_IP "cd $PATH && git checkout dev && pm2 delete $APPNAME && pm2 start npm --name $APPNAME -- start"
+    - pm2 delete $APPNAME
+    - pm2 start npm --name $APPNAME -- start
   cache:
     <<: *global_cache
     policy: pull
